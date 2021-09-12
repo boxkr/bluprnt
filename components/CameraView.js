@@ -1,7 +1,7 @@
 import React, {useEffect,useRef,useState} from 'react';
 import {StyleSheet, View, Text,TouchableOpacity} from 'react-native';
 import {Camera} from 'expo-camera'
-
+let classifications = ["Heart","Round","Oblong","Oval","Square"]
 
 const styles = StyleSheet.create({
     container: {
@@ -76,11 +76,12 @@ const CameraView = () => {
       */
 
       //takes picture, gets base64 encoding
-      const photo = await camera.takePictureAsync({base64:true})
+      const photo = await camera.takePictureAsync({base64:true,})
       const base64ID = photo.base64
 
       //sends to api
-      await fetch('https://bluprntapi.herokuapp.com/data', {
+      let shape
+      await fetch('http://bluprntapi.herokuapp.com/data', {
         method:'POST',
         headers:{
           Accept: 'application/json','Content-Type':'application/json'
@@ -89,10 +90,12 @@ const CameraView = () => {
           "base64ID": base64ID
         })
       }).then(res=>res.json())
-      .then(data=>console.log(data))
+      .then(data=>shape = data)
       
+      roundHaircutsGirls = ["Long Layered Cuts","Choppy Pixie Cuts"]
+      roundHairGuys = ["A Pompadour","Quiff"]
+      alert(`Your face shape is ${classifications[shape]} \n For girls, ${roundHaircutsGirls[0]} and ${roundHaircutsGirls[1]} work best. \n For guys, ${roundHairGuys[0]} and ${roundHairGuys[1]}`)
 
-      alert('sent complete')
 
       
 
